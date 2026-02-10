@@ -31,9 +31,10 @@ O projeto utiliza o padrão **Page Object Model (POM)** para facilitar a manuten
 ## Execução dos Testes
 
 ### Pré-requisitos
-- Java 17 instalado  
-- Google Chrome instalado  
-- ChromeDriver compatível disponível no sistema  
+- Java 17 instalado
+- Google Chrome instalado
+
+O gerenciamento do driver do navegador é feito automaticamente pelo WebDriverManager, não sendo necessário baixar ou configurar drivers manualmente.
 
 ### Executar os testes
 
