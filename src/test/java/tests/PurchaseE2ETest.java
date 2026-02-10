@@ -1,64 +1,29 @@
 package tests;
 
-import org.junit.jupiter.api.AfterEach;
+import base.BaseTest;
+import data.CheckoutData;
+import data.LoginData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.CartPage;
-import pages.CheckoutPage;
-import pages.LoginPage;
-import pages.ProductsPage;
-import java.time.Duration;
 
-public class PurchaseE2ETest {
-
-    private WebDriver driver;
+public class PurchaseE2ETest extends BaseTest {
 
     @Test
-    public void shouldCompletePurchaseSuccessfully() {
-        System.setProperty(
-                "webdriver.chrome.driver",
-                "C:\\drivers\\chromedriver.exe"
-        );
-        driver = new ChromeDriver();
-
-        LoginPage loginPage = new LoginPage(driver);
-        ProductsPage productsPage = new ProductsPage(driver);
-        CartPage cartPage = new CartPage(driver);
-        CheckoutPage checkoutPage = new CheckoutPage(driver);
-
+    void shouldCompletePurchaseSuccessfully() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login(LoginData.VALID_USERNAME, LoginData.VALID_PASSWORD);
 
         productsPage.addBackpackToCart();
         productsPage.openCart();
 
-        Assertions.assertTrue(cartPage.hasItemsInCart());
+        Assertions.assertTrue(cartPage.hasItems());
 
         cartPage.clickCheckout();
 
-        checkoutPage.fillCheckoutInformation("João", "Silva", "12345");
+        checkoutPage.fillInformation(CheckoutData.valid());
         checkoutPage.clickContinue();
         checkoutPage.clickFinish();
 
-        By confirmationMessage = By.className("complete-header");
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(confirmationMessage));
-
-        Assertions.assertTrue(driver.findElement(confirmationMessage).isDisplayed());
-
-
-    }
-
-    @AfterEach
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        Assertions.assertTrue(checkoutPage.isPurchaseCompleted());
     }
 }
