@@ -1,38 +1,17 @@
 package tests;
 
-import org.junit.jupiter.api.AfterEach;
+import base.BaseTest;
+import data.LoginData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import pages.LoginPage;
-import pages.ProductsPage;
 
-public class ProductsTest {
-
-    private WebDriver driver;
+public class ProductsTest extends BaseTest {
 
     @Test
-    public void shouldDisplayProductsPage() {
-        System.setProperty(
-                "webdriver.chrome.driver",
-                "C:\\drivers\\chromedriver.exe"
-        );
-        driver = new ChromeDriver();
-
-        LoginPage loginPage = new LoginPage(driver);
-        ProductsPage productsPage = new ProductsPage(driver);
-
+    void shouldDisplayProductsPageAfterLogin() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login(LoginData.VALID_USERNAME, LoginData.VALID_PASSWORD);
 
-        Assertions.assertTrue(productsPage.isPageDisplayed());
-    }
-
-    @AfterEach
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        Assertions.assertTrue(productsPage.isDisplayed());
     }
 }

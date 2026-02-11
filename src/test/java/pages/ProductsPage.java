@@ -1,29 +1,28 @@
 package pages;
 
+import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class ProductsPage {
+public class ProductsPage extends BasePage {
 
-    private WebDriver driver;
-
-    private By pageTitle = By.className("title");
-    private By addBackpackButton = By.id("add-to-cart-sauce-labs-backpack");
-    private By cartIcon = By.className("shopping_cart_link");
+    private final By addBackpack = By.id("add-to-cart-sauce-labs-backpack");
+    private final By cartIcon = By.className("shopping_cart_link");
 
     public ProductsPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    public boolean isPageDisplayed() {
-        return driver.findElement(pageTitle).isDisplayed();
+    public boolean isDisplayed() {
+        return waitForVisibility(addBackpack).isDisplayed();
     }
 
     public void addBackpackToCart() {
-        driver.findElement(addBackpackButton).click();
+        waitForClickability(addBackpack).click();
     }
 
     public void openCart() {
-        driver.findElement(cartIcon).click();
+        waitForClickability(cartIcon).click();
     }
 }
+

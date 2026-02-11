@@ -1,45 +1,44 @@
 package pages;
 
+import base.BasePage;
+import data.CheckoutData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class CheckoutPage {
+public class CheckoutPage extends BasePage {
 
-    private WebDriver driver;
-
-    private By firstNameField = By.id("first-name");
-    private By lastNameField = By.id("last-name");
-    private By postalCodeField = By.id("postal-code");
-    private By continueButton = By.id("continue");
-    private By finishButton = By.id("finish");
+    private final By firstName = By.id("first-name");
+    private final By lastName = By.id("last-name");
+    private final By postalCode = By.id("postal-code");
+    private final By continueButton = By.id("continue");
+    private final By finishButton = By.id("finish");
+    private final By confirmationMessage =
+            By.cssSelector("[data-test='complete-header']");
 
     public CheckoutPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    public void fillFirstName(String firstName) {
-        driver.findElement(firstNameField).sendKeys(firstName);
-    }
-
-    public void fillLastName(String lastName) {
-        driver.findElement(lastNameField).sendKeys(lastName);
-    }
-
-    public void fillPostalCode(String postalCode) {
-        driver.findElement(postalCodeField).sendKeys(postalCode);
+    public void fillInformation(CheckoutData data) {
+        waitForVisibility(firstName).sendKeys(data.getFirstName());
+        waitForVisibility(lastName).sendKeys(data.getLastName());
+        waitForVisibility(postalCode).sendKeys(data.getPostalCode());
     }
 
     public void clickContinue() {
-        driver.findElement(continueButton).click();
+        waitForClickability(continueButton).click();
     }
 
     public void clickFinish() {
-        driver.findElement(finishButton).click();
+        waitForClickability(finishButton).click();
     }
 
-    public void fillCheckoutInformation(String firstName, String lastName, String postalCode) {
-        fillFirstName(firstName);
-        fillLastName(lastName);
-        fillPostalCode(postalCode);
+    public boolean isPurchaseCompleted() {
+        return waitForVisibility(confirmationMessage).isDisplayed();
     }
+
+    public boolean isFinishButtonDisplayed() {
+        return waitForVisibility(finishButton).isDisplayed();
+    }
+
 }

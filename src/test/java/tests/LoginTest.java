@@ -1,58 +1,25 @@
 package tests;
 
-import org.junit.jupiter.api.AfterEach;
+import base.BaseTest;
+import data.LoginData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import pages.LoginPage;
-import pages.ProductsPage;
 
-public class LoginTest {
-
-    private WebDriver driver;
+public class LoginTest extends BaseTest {
 
     @Test
-    public void shouldLoginWithValidCredentials() {
-        System.setProperty(
-                "webdriver.chrome.driver",
-                "C:\\drivers\\chromedriver.exe"
-        );
-        driver = new ChromeDriver();
-
-        LoginPage loginPage = new LoginPage(driver);
-        ProductsPage productsPage = new ProductsPage(driver);
-
+    void shouldLoginWithValidCredentials() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login(LoginData.VALID_USERNAME, LoginData.VALID_PASSWORD);
 
-        Assertions.assertTrue(productsPage.isPageDisplayed());
+        Assertions.assertTrue(productsPage.isDisplayed());
     }
 
     @Test
-    public void shouldNotLoginWithInvalidPassword() {
-        System.setProperty(
-                "webdriver.chrome.driver",
-                "C:\\drivers\\chromedriver.exe"
-        );
-        driver = new ChromeDriver();
-
-        LoginPage loginPage = new LoginPage(driver);
-
+    void shouldNotLoginWithInvalidPassword() {
         loginPage.open();
-        loginPage.login("standard_user", "wrong_password");
+        loginPage.login(LoginData.VALID_USERNAME, LoginData.INVALID_PASSWORD);
 
-        By errorMessage = By.cssSelector("[data-test='error']");
-        Assertions.assertTrue(driver.findElement(errorMessage).isDisplayed());
-
+        Assertions.assertTrue(loginPage.isErrorDisplayed());
     }
-
-    @AfterEach
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
 }
